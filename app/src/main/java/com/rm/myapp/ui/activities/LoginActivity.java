@@ -25,9 +25,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @BindView(R.id.register_btn)
     Button register_btn;
 
-    String name, email;
-    String idToken, id;
-    TransparentProgressDialog pd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

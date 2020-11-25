@@ -48,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        String gender = SharedHelper.getKey(MainActivity.this,UserConstant.gender);
+        if (gender.equalsIgnoreCase("male")){
+            navigationView.getMenu().findItem(R.id.nav_sendLocation).setVisible(false);
+        }
     }
 
     @Override

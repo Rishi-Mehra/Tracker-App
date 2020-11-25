@@ -1,35 +1,28 @@
 package com.rm.myapp.ui.fragments;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.AvoidType;
+import com.akexorcist.googledirection.model.Direction;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,30 +33,33 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import com.rm.myapp.R;
-import com.rm.myapp.model.DataModel;
 import com.rm.myapp.model.GetLocationModel;
 import com.rm.myapp.retrofit.ApiInterface;
 import com.rm.myapp.retrofit.AppConfig;
-
 import java.net.SocketTimeoutException;
+
+
+import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 import static android.content.ContentValues.TAG;
 
-
-public class SendLocationFragment extends Fragment implements OnMapReadyCallback,
-        com.google.android.gms.location.LocationListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
-
+public class GetLocationFragment extends Fragment  implements OnMapReadyCallback,
+        LocationListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener{
     private GoogleMap mMap;
     Location mLastLocation;
+
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     private Marker geoFenceMarker;
-    @BindView(R.id.locationBtn)
-    Button locationBtn;
-    private double myLatitude;
-    private double myLongitute;
+    private double userlatitude ,myLatitude;
+    private double userlongitute,myLongitute;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,10 +70,9 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_send_location, container, false);
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
         init(view);
-
-
+        getLocation();
         return view;
     }
 
@@ -89,14 +84,10 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
-        locationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendLocation();
-            }
-        });
 
     }
+
+
 
 
     @Override
@@ -160,9 +151,9 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        //Place current location marker
         myLatitude = location.getLatitude();
         myLongitute = location.getLongitude();
+        //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
@@ -240,26 +231,53 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
         // TODO close app and warn user
     }
 
-    private void sendLocation() {
+    private void getLocation(){
         ApiInterface apiInterface1 = AppConfig.getRetrofit().create(ApiInterface.class);
-        Call<DataModel> call = apiInterface1.sendLocation(AppConfig.Key, AppConfig.Token, String.valueOf(myLatitude), String.valueOf(myLongitute));
-        call.enqueue(new Callback<DataModel>() {
+        Call<GetLocationModel> call = apiInterface1.getLocation(AppConfig.Key,AppConfig.Token);
+        call.enqueue(new Callback<GetLocationModel>() {
             @Override
-            public void onResponse(Call<DataModel> call, Response<DataModel> response) {
+            public void onResponse(Call<GetLocationModel> call, Response<GetLocationModel> response) {
 
-                if (response.isSuccessful()) {
-                    Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful()){
+                    userlatitude = Double.parseDouble(response.body().getData().get(0).getLatitude());
+                    userlongitute = Double.parseDouble(response.body().getData().get(0).getLongitude());
+                    createRoot();
                 }
             }
 
             @Override
-            public void onFailure(Call<DataModel> call, Throwable t) {
+            public void onFailure(Call<GetLocationModel> call, Throwable t) {
 
+                System.out.println("++++="+t.getMessage());
                 if (t instanceof SocketTimeoutException) {
-                    sendLocation();
+                    getLocation();
                 }
             }
         });
     }
+
+    private void createRoot() {
+        GoogleDirection.withServerKey(String.valueOf(R.string.google_maps_key))
+                .from(new LatLng(30.7333, 76.7794))
+                .to(new LatLng(30.7293,76.6947))
+                .avoid(AvoidType.FERRIES)
+                .avoid(AvoidType.HIGHWAYS)
+                .execute(new DirectionCallback() {
+                    @Override
+                    public void onDirectionSuccess(Direction direction) {
+                        if(direction.isOK()) {
+                            // Do something
+                        } else {
+                            // Do something
+                        }
+                    }
+
+                    @Override
+                    public void onDirectionFailure(Throwable t) {
+                        // Do something
+                    }
+                });
+    }
+
 
 }

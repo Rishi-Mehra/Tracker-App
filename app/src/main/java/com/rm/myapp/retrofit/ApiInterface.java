@@ -2,25 +2,40 @@ package com.rm.myapp.retrofit;
 
 
 
+import com.rm.myapp.model.DataModel;
+import com.rm.myapp.model.GetLocationModel;
+
 import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-  /*  @FormUrlEncoded
-    @POST("register")
-    Call<RegisterModel> registerUser(
-            @Field("name") String name,
-            @Field("email") String email,
-            @Field("password") String password,
-            @Field("organization") String organization
+    @FormUrlEncoded
+    @POST("add_user_lat_long")
+    Call<DataModel> sendLocation(
+            @Header("Secret-key")String  key,
+            @Field("token") String token,
+            @Field("latitude") String latitude,
+            @Field("longitude") String longitude
+
     );
+
+    @FormUrlEncoded
+    @POST("get_user_lat_long")
+    Call<GetLocationModel> getLocation(
+            @Header("Secret-key")String  key,
+            @Field("token") String token
+
+    );
+
+  /*
 
     @FormUrlEncoded
     @POST("GoogleLogin")

@@ -7,7 +7,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class AppConfig {
-    private static String BASE_URL = "http://arthtechsolutions.com/geo/api/";
+    private static String BASE_URL = "https://chatwithsupport.us/tracker/User/";
+    public static String Key = "9787svdsdca";
+    public static String Token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDYyOTM5OTQsImNoayI6MTEzNzk2MzcxOSwic3RhcnQiOjE2MDYyOTM5OTQsImV4cGlyZSI6MTYwNjMwMTE5NCwicGhvbmUiOiI5ODc2NTQzMjEwIiwiaWQiOiIxIiwicm9sZSI6IjIiLCJzdGF0dXMiOiIxIn0.PJqRMRoRZ_MzEhU_IhffRVI4XX2BLbhk2uhi8h0EMMI";
+
 
     public static Retrofit getRetrofit() {
         OkHttpClient client = new OkHttpClient.Builder()

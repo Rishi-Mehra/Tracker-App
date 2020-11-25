@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/nav_getLocation"
-        android:name="com.rm.myapp.ui.fragments.SendLocationFragment"
+        android:name="com.rm.myapp.ui.fragments.GetLocationFragment"
         android:label="@string/menu_getLocation"
-        tools:layout="@layout/fragment_send_location" />
+        tools:layout="@layout/fragment_maps" />
 </navigation>
