@@ -9,8 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public  class AppConfig {
     private static String BASE_URL = "https://chatwithsupport.us/tracker/User/";
     public static String Key = "9787svdsdca";
-    public static String Token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDYyOTM5OTQsImNoayI6MTEzNzk2MzcxOSwic3RhcnQiOjE2MDYyOTM5OTQsImV4cGlyZSI6MTYwNjMwMTE5NCwicGhvbmUiOiI5ODc2NTQzMjEwIiwiaWQiOiIxIiwicm9sZSI6IjIiLCJzdGF0dXMiOiIxIn0.PJqRMRoRZ_MzEhU_IhffRVI4XX2BLbhk2uhi8h0EMMI";
-
+    public static String Token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDYzMDMxMzAsImNoayI6MTI1ODg5NTkwMSwic3RhcnQiOjE2MDYzMDMxMzAsImV4cGlyZSI6MTYwNjMxMDMzMCwicGhvbmUiOiI5ODc2NTQzMjEwIiwiaWQiOiIxIiwicm9sZSI6IjIiLCJzdGF0dXMiOiIxIn0.HTt3Zt549G6GIHIjM7oZCT1GhopariUVPSJiHOZ0yFY";
 
     public static Retrofit getRetrofit() {
         OkHttpClient client = new OkHttpClient.Builder()

@@ -266,8 +266,11 @@ public class GetLocationFragment extends Fragment  implements OnMapReadyCallback
                     @Override
                     public void onDirectionSuccess(Direction direction) {
                         if(direction.isOK()) {
+                            System.out.println("d "+direction.getStatus());
                             // Do something
                         } else {
+                            System.out.println("d ++++++++++ "+direction.getRouteList());
+                            System.out.println("d ++++++++++ "+direction.getStatus());
                             // Do something
                         }
                     }
