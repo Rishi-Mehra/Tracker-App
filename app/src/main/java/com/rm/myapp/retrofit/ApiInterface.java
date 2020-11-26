@@ -18,7 +18,17 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
     @FormUrlEncoded
-    @POST("add_user_lat_long")
+    @POST("Register/register_user")
+    Call<DataModel> registerUser(
+            @Header("Secret-key")String  key,
+            @Field("userName") String userName,
+            @Field("phoneNumber") String phoneNumber,
+            @Field("password") String password,
+            @Field("gender") String gender
+    );
+
+    @FormUrlEncoded
+    @POST("User/add_user_lat_long")
     Call<DataModel> sendLocation(
             @Header("Secret-key")String  key,
             @Field("token") String token,
@@ -28,7 +38,7 @@ public interface ApiInterface {
     );
 
     @FormUrlEncoded
-    @POST("get_user_lat_long")
+    @POST("User/get_user_lat_long")
     Call<GetLocationModel> getLocation(
             @Header("Secret-key")String  key,
             @Field("token") String token
@@ -37,13 +47,7 @@ public interface ApiInterface {
 
   /*
 
-    @FormUrlEncoded
-    @POST("GoogleLogin")
-    Call<SocialLoginModel> socialLogin(
-            @Field("name") String name,
-            @Field("email") String email,
-            @Field("token") String token
-    );
+
 
     @FormUrlEncoded
     @POST("login")

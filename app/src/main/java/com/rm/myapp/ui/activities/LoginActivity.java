@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rm.myapp.R;
@@ -24,6 +25,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText mobile_etxt;
     @BindView(R.id.register_btn)
     Button register_btn;
+    @BindView(R.id.registerTxt)
+    TextView registerTxt;
 
 
 
@@ -46,6 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void initUI() {
         register_btn.setOnClickListener(this);
+        registerTxt.setOnClickListener(this);
 
     }
 
@@ -64,6 +68,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     startActivity(new Intent(this,OtpActivity.class));
                     finish();
                 }
+                break;
+            case R.id.registerTxt:
+                startActivity(new Intent(this,RegisterActivity.class));
+                finish();
                 break;
 
         }

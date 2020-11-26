@@ -239,9 +239,11 @@ public class GetLocationFragment extends Fragment  implements OnMapReadyCallback
             public void onResponse(Call<GetLocationModel> call, Response<GetLocationModel> response) {
 
                 if (response.isSuccessful()){
-                    userlatitude = Double.parseDouble(response.body().getData().get(0).getLatitude());
-                    userlongitute = Double.parseDouble(response.body().getData().get(0).getLongitude());
-                    createRoot();
+                    if(response.body().getData()!=null&&response.body().getData().size()>0) {
+                        userlatitude = Double.parseDouble(response.body().getData().get(0).getLatitude());
+                        userlongitute = Double.parseDouble(response.body().getData().get(0).getLongitude());
+                        createRoot();
+                    }
                 }
             }
 

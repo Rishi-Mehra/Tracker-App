@@ -7,7 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public  class AppConfig {
-    private static String BASE_URL = "https://chatwithsupport.us/tracker/User/";
+    private static String BASE_URL = "https://chatwithsupport.us/tracker/";
     public static String Key = "9787svdsdca";
     public static String Token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDYzMDMxMzAsImNoayI6MTI1ODg5NTkwMSwic3RhcnQiOjE2MDYzMDMxMzAsImV4cGlyZSI6MTYwNjMxMDMzMCwicGhvbmUiOiI5ODc2NTQzMjEwIiwiaWQiOiIxIiwicm9sZSI6IjIiLCJzdGF0dXMiOiIxIn0.HTt3Zt549G6GIHIjM7oZCT1GhopariUVPSJiHOZ0yFY";
 
