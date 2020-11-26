@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.rm.myapp.R;
-
-
 public class TransparentProgressDialog extends Dialog {
 		
 	private ImageView iv;
