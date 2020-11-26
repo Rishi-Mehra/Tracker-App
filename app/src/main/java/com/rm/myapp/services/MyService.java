@@ -105,7 +105,7 @@ public class MyService extends Service implements SpeechDelegate, Speech.stopDue
           double latitude = gps.getLatitude();
           double longitude = gps.getLongitude();
           SendLocationFragment sendLocationFragment = new SendLocationFragment();
-          sendLocationFragment.sendLocation(String.valueOf(latitude),String.valueOf(longitude));
+          sendLocationFragment.sendLocation(MyService.this,String.valueOf(latitude),String.valueOf(longitude));
            } else {
           // Can't get location.
           // GPS or network is not enabled.

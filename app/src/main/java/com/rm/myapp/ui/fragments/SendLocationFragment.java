@@ -92,7 +92,7 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendLocation(String.valueOf(myLatitude),String.valueOf(myLongitute));
+                sendLocation(getActivity(),String.valueOf(myLatitude),String.valueOf(myLongitute));
             }
         });
 
@@ -240,15 +240,16 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
         // TODO close app and warn user
     }
 
-    public void sendLocation(String myLatitude,String myLongitute) {
+    public void sendLocation(Context context, String myLatitude,String myLongitute) {
         ApiInterface apiInterface1 = AppConfig.getRetrofit().create(ApiInterface.class);
         Call<DataModel> call = apiInterface1.sendLocation(AppConfig.Key, AppConfig.Token, myLatitude, myLongitute);
         call.enqueue(new Callback<DataModel>() {
             @Override
             public void onResponse(Call<DataModel> call, Response<DataModel> response) {
 
+                System.out.println("+++++++ "+response.body().getMessage());
                 if (response.isSuccessful()) {
-                    Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText( context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -256,7 +257,7 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
             public void onFailure(Call<DataModel> call, Throwable t) {
 
                 if (t instanceof SocketTimeoutException) {
-                    sendLocation(myLatitude,myLongitute);
+                    sendLocation(context,myLatitude,myLongitute);
                 }
             }
         });
