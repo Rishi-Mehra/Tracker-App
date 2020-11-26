@@ -14,6 +14,11 @@
     <string name="menu_send_location">Send Location</string>
     <string name="menu_getLocation">Get Location</string>
     <string name="menu_logout">Logout</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="permission_required">Please grant the permission to use the microphone</string>
+    <string name="voice_recognizer_is_active">Voice Recognizer is active...</string>
+    <string name="ask_permission">Please allow Speech to always run in the background,else our services can\'t be accessed when you are in distress</string>
+    <string name="allow">ALLOW</string>
+    <string name="enable_autostart">Enable AutoStart</string>
+    <string name="my_service_name">com.rm.myapp.services</string>
 
 </resources>

@@ -92,7 +92,7 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendLocation();
+                sendLocation(String.valueOf(myLatitude),String.valueOf(myLongitute));
             }
         });
 
@@ -240,9 +240,9 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
         // TODO close app and warn user
     }
 
-    private void sendLocation() {
+    public void sendLocation(String myLatitude,String myLongitute) {
         ApiInterface apiInterface1 = AppConfig.getRetrofit().create(ApiInterface.class);
-        Call<DataModel> call = apiInterface1.sendLocation(AppConfig.Key, AppConfig.Token, String.valueOf(myLatitude), String.valueOf(myLongitute));
+        Call<DataModel> call = apiInterface1.sendLocation(AppConfig.Key, AppConfig.Token, myLatitude, myLongitute);
         call.enqueue(new Callback<DataModel>() {
             @Override
             public void onResponse(Call<DataModel> call, Response<DataModel> response) {
@@ -256,7 +256,7 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
             public void onFailure(Call<DataModel> call, Throwable t) {
 
                 if (t instanceof SocketTimeoutException) {
-                    sendLocation();
+                    sendLocation(myLatitude,myLongitute);
                 }
             }
         });

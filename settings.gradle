@@ -1,3 +1,4 @@
+include ':speech'
 include ':drawroutemap'
 include ':app'
 rootProject.name = "MyApp"
