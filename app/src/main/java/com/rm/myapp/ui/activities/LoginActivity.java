@@ -10,12 +10,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rm.myapp.R;
+import com.rm.myapp.helper.SharedHelper;
 import com.rm.myapp.helper.TransparentProgressDialog;
+import com.rm.myapp.model.DataModel;
+import com.rm.myapp.retrofit.ApiInterface;
+import com.rm.myapp.retrofit.AppConfig;
+
+import java.net.SocketTimeoutException;
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.rm.myapp.helper.UserConstant.email;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -27,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Button register_btn;
     @BindView(R.id.registerTxt)
     TextView registerTxt;
-
+    TransparentProgressDialog pd;
 
 
     @Override
@@ -43,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void init() {
         unbinder=  ButterKnife.bind(this);
-       // pd = new TransparentProgressDialog(this, R.drawable.spinner);
+        pd = new TransparentProgressDialog(this, R.drawable.spinner);
 
     }
 
@@ -64,49 +75,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }else if(TextUtils.isEmpty(mobileNumber)){
                     Toast.makeText(this, "Please enter  Mobile Number!", Toast.LENGTH_SHORT).show();
                 }else {
-                   // userLogin(mobileNumber);
-                    startActivity(new Intent(this,OtpActivity.class));
-                    finish();
+                    userLogin(mobileNumber);
+
                 }
                 break;
             case R.id.registerTxt:
                 startActivity(new Intent(this,RegisterActivity.class));
-                finish();
                 break;
 
         }
     }
 
-   /* private void userLogin(String mobileNumber){
+    private void userLogin(String mobileNumber){
+        pd.show();
         ApiInterface apiInterface1 = AppConfig.getRetrofit().create(ApiInterface.class);
-        Call<LoginModel> call = apiInterface1.loginUser(email,"123456");
-        call.enqueue(new Callback<LoginModel>() {
+        Call<DataModel> call = apiInterface1.loginUser(AppConfig.Key,mobileNumber);
+        call.enqueue(new Callback<DataModel>() {
             @Override
-            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+            public void onResponse(Call<DataModel> call, Response<DataModel> response) {
                 pd.dismiss();
                 if (response.isSuccessful()){
-
-                    if (response.body().getSuccess()){
-                        SharedHelper.putBooleanKey(LoginActivity.this, UserConstant.isLogin, true );
-                        SharedHelper.putKey(LoginActivity.this, UserConstant.id, String.valueOf(response.body().getUserDetail().getId()));
-                        SharedHelper.putKey(LoginActivity.this, UserConstant.name,  response.body().getUserDetail().getName().toString());
-                        SharedHelper.putKey(LoginActivity.this, UserConstant.email, response.body().getUserDetail().getEmail().toString());
-                        SharedHelper.putKey(LoginActivity.this, UserConstant.organization, response.body().getUserDetail().getOrganization().toString());
-                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                        finish();
-                    }
+                    String otp =response.body().getData().toString();
+                    System.out.println("++++== "+otp);
+                    Intent intent = new Intent(LoginActivity.this,OtpActivity.class);
+                    intent.putExtra("otp",otp);
+                    startActivity(intent);
+                    finish();
                 }
             }
 
             @Override
-            public void onFailure(Call<LoginModel> call, Throwable t) {
+            public void onFailure(Call<DataModel> call, Throwable t) {
                 pd.dismiss();
                 if (t instanceof SocketTimeoutException) {
                     userLogin(mobileNumber);
                 }
             }
         });
-    }*/
+    }
 
 
 

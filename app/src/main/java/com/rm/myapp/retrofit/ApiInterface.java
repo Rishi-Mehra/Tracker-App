@@ -2,8 +2,10 @@ package com.rm.myapp.retrofit;
 
 
 
+import com.rm.myapp.model.AllUserModel;
 import com.rm.myapp.model.DataModel;
 import com.rm.myapp.model.GetLocationModel;
+import com.rm.myapp.model.LoginModel;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,21 @@ public interface ApiInterface {
     );
 
     @FormUrlEncoded
+    @POST("Auth/auth_login")
+    Call<DataModel> loginUser(
+            @Header("Secret-key")String  key,
+            @Field("userPhone") String userPhone
+
+    );
+    @FormUrlEncoded
+    @POST("Auth/enter_otp")
+    Call<LoginModel> verifyOTP(
+            @Header("Secret-key")String  key,
+            @Field("otp") String otp
+
+    );
+
+    @FormUrlEncoded
     @POST("User/add_user_lat_long")
     Call<DataModel> sendLocation(
             @Header("Secret-key")String  key,
@@ -44,6 +61,10 @@ public interface ApiInterface {
             @Field("token") String token
 
     );
+
+    @GET("Api/get_all_users")
+    Call<AllUserModel> getAllUser();
+
 
   /*
 

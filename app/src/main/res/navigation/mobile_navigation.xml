@@ -11,6 +11,11 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
+    <activity
+        android:id="@+id/nav_profile"
+        android:name="com.rm.myapp.ui.activities.ProfileActivity"
+        android:label="@string/profile"
+        tools:layout="@layout/activity_profile"/>
     <fragment
         android:id="@+id/nav_sendLocation"
         android:name="com.rm.myapp.ui.fragments.SendLocationFragment"

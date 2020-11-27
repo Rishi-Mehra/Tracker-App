@@ -1,6 +1,7 @@
 package com.rm.myapp.ui.fragments;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -10,9 +11,12 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +28,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +47,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rm.myapp.R;
+import com.rm.myapp.adapter.UserAdapter;
+import com.rm.myapp.model.AllUserModel;
 import com.rm.myapp.model.DataModel;
 import com.rm.myapp.model.GetLocationModel;
 import com.rm.myapp.retrofit.ApiInterface;
@@ -64,6 +72,7 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
     Button locationBtn;
     private double myLatitude;
     private double myLongitute;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +101,7 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendLocation(getActivity(),String.valueOf(myLatitude),String.valueOf(myLongitute));
+                getAllUser(getActivity(),String.valueOf(myLatitude),String.valueOf(myLongitute));
             }
         });
 
@@ -240,27 +249,52 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
         // TODO close app and warn user
     }
 
-    public void sendLocation(Context context, String myLatitude,String myLongitute) {
-        ApiInterface apiInterface1 = AppConfig.getRetrofit().create(ApiInterface.class);
-        Call<DataModel> call = apiInterface1.sendLocation(AppConfig.Key, AppConfig.Token, myLatitude, myLongitute);
-        call.enqueue(new Callback<DataModel>() {
-            @Override
-            public void onResponse(Call<DataModel> call, Response<DataModel> response) {
 
-                System.out.println("+++++++ "+response.body().getMessage());
+
+
+
+    public void getAllUser(Context context,String myLatitude,String myLongitute) {
+        ApiInterface apiInterface1 = AppConfig.getRetrofit().create(ApiInterface.class);
+        Call<AllUserModel> call = apiInterface1.getAllUser();
+        call.enqueue(new Callback<AllUserModel>() {
+            @Override
+            public void onResponse(Call<AllUserModel> call, Response<AllUserModel> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText( context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+
+                    userDialog(context,response.body(),myLatitude,myLongitute);
                 }
             }
 
             @Override
-            public void onFailure(Call<DataModel> call, Throwable t) {
+            public void onFailure(Call<AllUserModel> call, Throwable t) {
 
                 if (t instanceof SocketTimeoutException) {
-                    sendLocation(context,myLatitude,myLongitute);
+                    getAllUser(context,myLatitude,myLongitute);
                 }
             }
         });
     }
 
+    private void userDialog(Context context,AllUserModel model,String myLatitude,String myLongitute){
+
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.user_dialog);
+        Window window = dialog.getWindow();
+        window.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        dialog.setTitle("User List");
+        ImageView back_btn  = (ImageView) dialog.findViewById(R.id.back_btn);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        RecyclerView userRv  = (RecyclerView) dialog.findViewById(R.id.userRv);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        userRv.setLayoutManager(layoutManager);
+        userRv.setAdapter( new UserAdapter(context, model, myLatitude, myLongitute));
+
+        dialog.show();
+    }
 }

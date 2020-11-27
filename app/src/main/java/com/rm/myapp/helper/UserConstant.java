@@ -3,6 +3,7 @@ package com.rm.myapp.helper;
 public class UserConstant {
 
     public static  String  isLogin="ISLOGIN";
+    public static  String  token="TOKEN";
     public static  String  isSocialLogin="isSocialLogin";
     public static  String  userId="id";
     public static  String  Orgid="Orgid";
