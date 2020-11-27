@@ -35,6 +35,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.rm.myapp.R;
+import com.rm.myapp.helper.SharedHelper;
+import com.rm.myapp.helper.UserConstant;
 import com.rm.myapp.model.GetLocationModel;
 import com.rm.myapp.retrofit.ApiInterface;
 import com.rm.myapp.retrofit.AppConfig;
@@ -176,7 +178,7 @@ public class GetLocationFragment extends Fragment  implements OnMapReadyCallback
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
-
+        createRoot();
     }
 
     @Override
@@ -233,7 +235,8 @@ public class GetLocationFragment extends Fragment  implements OnMapReadyCallback
 
     private void getLocation(){
         ApiInterface apiInterface1 = AppConfig.getRetrofit().create(ApiInterface.class);
-        Call<GetLocationModel> call = apiInterface1.getLocation(AppConfig.Key,AppConfig.Token);
+        String token = SharedHelper.getKey(getActivity(), UserConstant.token);
+        Call<GetLocationModel> call = apiInterface1.getLocation(AppConfig.Key,token);
         call.enqueue(new Callback<GetLocationModel>() {
             @Override
             public void onResponse(Call<GetLocationModel> call, Response<GetLocationModel> response) {
