@@ -84,7 +84,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         }
     }
 
-    public void sendLocation(Context context, String myLatitude,String myLongitute) {
+    public static void sendLocation(Context context, String myLatitude, String myLongitute) {
         ApiInterface apiInterface1 = AppConfig.getRetrofit().create(ApiInterface.class);
         String token = SharedHelper.getKey(context, UserConstant.token);
         Call<DataModel> call = apiInterface1.sendLocation(AppConfig.Key,token, myLatitude, myLongitute);
@@ -92,7 +92,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
             @Override
             public void onResponse(Call<DataModel> call, Response<DataModel> response) {
 
-                System.out.println("+++++++ "+response.body().getMessage());
+               // System.out.println("+++++++ "+response.body().getMessage());
                 if (response.isSuccessful()) {
                     Toast.makeText( context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -100,7 +100,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
 
             @Override
             public void onFailure(Call<DataModel> call, Throwable t) {
-
+                    t.getMessage();
                 if (t instanceof SocketTimeoutException) {
                     sendLocation(context,myLatitude,myLongitute);
                 }

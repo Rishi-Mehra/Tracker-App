@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.rm.myapp.R;
+import com.rm.myapp.adapter.UserAdapter;
 import com.rm.myapp.ui.fragments.SendLocationFragment;
 import com.sac.speech.GoogleVoiceTypingDisabledException;
 import com.sac.speech.Speech;
@@ -105,7 +106,7 @@ public class MyService extends Service implements SpeechDelegate, Speech.stopDue
           double latitude = gps.getLatitude();
           double longitude = gps.getLongitude();
           SendLocationFragment sendLocationFragment = new SendLocationFragment();
-          sendLocationFragment.getAllUser(MyService.this,String.valueOf(latitude),String.valueOf(longitude));
+          UserAdapter.sendLocation(MyService.this,String.valueOf(latitude),String.valueOf(longitude));
            } else {
           // Can't get location.
           // GPS or network is not enabled.
