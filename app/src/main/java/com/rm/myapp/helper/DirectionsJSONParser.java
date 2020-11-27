@@ -1,4 +1,4 @@
-package com.rm.myapp;
+package com.rm.myapp.helper;
 
 import com.google.android.gms.maps.model.LatLng;
 
