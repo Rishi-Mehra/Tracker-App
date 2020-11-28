@@ -234,7 +234,6 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted
                     // getLastKnownLocation();
-
                 } else {
                     // Permission denied
                     permissionsDenied();
