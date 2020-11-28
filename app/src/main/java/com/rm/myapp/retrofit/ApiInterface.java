@@ -4,6 +4,7 @@ package com.rm.myapp.retrofit;
 
 import com.rm.myapp.model.AllUserModel;
 import com.rm.myapp.model.DataModel;
+import com.rm.myapp.model.DistanceUserModel;
 import com.rm.myapp.model.GetLocationModel;
 import com.rm.myapp.model.LoginModel;
 
@@ -17,7 +18,7 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-public interface ApiInterface {
+public interface    ApiInterface {
 
     @FormUrlEncoded
     @POST("Register/register_user")
@@ -59,6 +60,14 @@ public interface ApiInterface {
     Call<GetLocationModel> getLocation(
             @Header("Secret-key")String  key,
             @Field("token") String token
+
+    );
+
+    @FormUrlEncoded
+    @POST("distance.php")
+    Call<DistanceUserModel> getDistanceUser(
+            @Field("latitude")String  latitude,
+            @Field("longitude") String longitude
 
     );
 

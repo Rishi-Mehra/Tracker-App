@@ -16,6 +16,7 @@ import com.rm.myapp.helper.SharedHelper;
 import com.rm.myapp.helper.UserConstant;
 import com.rm.myapp.model.AllUserModel;
 import com.rm.myapp.model.DataModel;
+import com.rm.myapp.model.DistanceUserModel;
 import com.rm.myapp.retrofit.ApiInterface;
 import com.rm.myapp.retrofit.AppConfig;
 
@@ -30,11 +31,11 @@ import retrofit2.Response;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> {
 
     private Context context;
-    private AllUserModel model;
+    private DistanceUserModel model;
     private String myLatitude;
     private String myLongitute;
 
-    public UserAdapter( Context context,AllUserModel model,String myLatitude,String myLongitute) {
+    public UserAdapter( Context context,DistanceUserModel model,String myLatitude,String myLongitute) {
         this.context = context;
         this.model=model;
         this.myLatitude = myLatitude;
@@ -51,9 +52,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull UserAdapter.MyViewHolder holder, int position) {
 
-        holder.nametxt.setText(model.getData().get(position).getUserName());
-        holder.gendertxt.setText(model.getData().get(position).getGender());
-        holder.phonetxt.setText(model.getData().get(position).getPhoneNumber());
+        holder.nametxt.setText(model.getUserList().get(position).getUserName());
+      //  holder.gendertxt.setText(model.getUserList().get(position).get());
+        holder.phonetxt.setText(model.getUserList().get(position).getPhoneNumber());
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +66,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        return model.getData().size();
+        return model.getUserList().size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder  {

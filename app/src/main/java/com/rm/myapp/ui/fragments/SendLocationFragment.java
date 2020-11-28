@@ -50,6 +50,7 @@ import com.rm.myapp.R;
 import com.rm.myapp.adapter.UserAdapter;
 import com.rm.myapp.model.AllUserModel;
 import com.rm.myapp.model.DataModel;
+import com.rm.myapp.model.DistanceUserModel;
 import com.rm.myapp.model.GetLocationModel;
 import com.rm.myapp.retrofit.ApiInterface;
 import com.rm.myapp.retrofit.AppConfig;
@@ -101,7 +102,7 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getAllUser(getActivity(),String.valueOf(myLatitude),String.valueOf(myLongitute));
+                getDistanceUser(getActivity(),String.valueOf(myLatitude),String.valueOf(myLongitute));
             }
         });
 
@@ -249,11 +250,7 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
         // TODO close app and warn user
     }
 
-
-
-
-
-    public void getAllUser(Context context,String myLatitude,String myLongitute) {
+    /*public void getAllUser(Context context,String myLatitude,String myLongitute) {
         ApiInterface apiInterface1 = AppConfig.getRetrofit().create(ApiInterface.class);
         Call<AllUserModel> call = apiInterface1.getAllUser();
         call.enqueue(new Callback<AllUserModel>() {
@@ -273,9 +270,30 @@ public class SendLocationFragment extends Fragment implements OnMapReadyCallback
                 }
             }
         });
+    }*/
+
+    public void getDistanceUser(Context context,String myLatitude,String myLongitute) {
+        ApiInterface apiInterface1 = AppConfig.getRetrofit().create(ApiInterface.class);
+        Call<DistanceUserModel> call = apiInterface1.getDistanceUser(myLatitude,myLongitute);
+        call.enqueue(new Callback<DistanceUserModel>() {
+            @Override
+            public void onResponse(Call<DistanceUserModel> call, Response<DistanceUserModel> response) {
+                if (response.isSuccessful()) {
+                    userDialog(context,response.body(),myLatitude,myLongitute);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DistanceUserModel> call, Throwable t) {
+
+                if (t instanceof SocketTimeoutException) {
+                    getDistanceUser(context,myLatitude,myLongitute);
+                }
+            }
+        });
     }
 
-    private void userDialog(Context context,AllUserModel model,String myLatitude,String myLongitute){
+    private void userDialog(Context context,DistanceUserModel model,String myLatitude,String myLongitute){
 
 
         final Dialog dialog = new Dialog(context);
